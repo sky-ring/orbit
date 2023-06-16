@@ -1,0 +1,12 @@
+type Mutation {
+    dummy: Int
+}
+type Query{
+    version: Version
+}
+
+type Version{
+    major: Int
+    minor: Int
+    patch: Int
+}

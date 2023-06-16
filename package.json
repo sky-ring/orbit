@@ -1,0 +1,42 @@
+{
+  "name": "orbit",
+  "version": "0.1.0",
+  "description": "Mini TON Blockchain Server",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "dev": "ts-node-dev ./src/main.ts --respawn --transpileOnly",
+    "prod": "tsc && node .build/main.js",
+    "codegen": "graphql-codegen --config codegen.yml",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "github.com/0xNebulae/orbit"
+  },
+  "author": "Amin Rezaei",
+  "license": "MIT",
+  "dependencies": {
+    "@graphql-tools/graphql-file-loader": "latest",
+    "@graphql-tools/json-file-loader": "latest",
+    "@graphql-tools/load": "latest",
+    "@graphql-tools/schema": "latest",
+    "@graphql-tools/url-loader": "latest",
+    "@ton-community/sandbox": "^0.11.0",
+    "express": "^4.18.2",
+    "express-graphql": "^0.12.0",
+    "graphql": "^15.3.0",
+    "graphql-tools": "^9.0.0",
+    "graphql-yoga": "^4.0.0"
+  },
+  "devDependencies": {
+    "@graphql-codegen/cli": "^4.0.1",
+    "@graphql-codegen/typescript": "^4.0.0",
+    "@graphql-codegen/typescript-resolvers": "^4.0.0",
+    "@types/express": "^4.17.17",
+    "@types/node": "^18.14.2",
+    "ts-node": "^10.9.1",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.1.3"
+  }
+}

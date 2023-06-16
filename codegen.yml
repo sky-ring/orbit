@@ -1,0 +1,8 @@
+schema: 
+  - 'gql/*.graphql'
+  - scalar Upload
+generates:
+  src/resolvers/resolvers.ts:
+    plugins:
+      - typescript
+      - typescript-resolvers

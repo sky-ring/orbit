@@ -31,7 +31,11 @@ export default class BlockchainLogic {
     if (!this.chains.has(id)) return false;
     let x = this.chains.delete(id);
     if (x && remove) {
-      // TODO: Remove snapshot + TXs
+      let cfg = await this.cfg();
+      cfg.snapshots = cfg.snapshots.filter((item) => item !== id);
+      await this.reload();
+      await db.del(`${id}-snapshot`);
+      await db.del(`${id}-tx`);
     }
     return x;
   };
@@ -41,7 +45,7 @@ export default class BlockchainLogic {
   private static cfg = async (): Promise<Config> => {
     if (!this.config) {
       let e = (await db.get<Config>("config")) ?? this.defaultConfig;
-      this.config = this.defaultConfig;
+      this.config = e;
     }
     return this.config;
   };

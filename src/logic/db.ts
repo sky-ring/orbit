@@ -23,6 +23,12 @@ export default class DatabaseLogic {
       if (error.status == 404) return undefined;
     }
   };
+  static del = async (key: string): Promise<boolean> => {
+    return await this.acquire()
+      .del(key)
+      .then(() => true)
+      .catch((e) => false);
+  };
   static set = async <T extends Entry>(
     key: string,
     value: T

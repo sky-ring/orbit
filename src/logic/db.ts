@@ -15,11 +15,18 @@ export default class DatabaseLogic {
     }
     return this.instance;
   };
-  static get = async (key: string): Promise<Entry | undefined> => {
-    let a = await this.acquire().get(key);
-    return a;
+  static get = async <T extends Entry>(key: string): Promise<T | undefined> => {
+    try {
+      let a = (await this.acquire().get(key)) as T;
+      return a;
+    } catch (error: any) {
+      if (error.status == 404) return undefined;
+    }
   };
-  static set = async (key: string, value: Entry): Promise<void> => {
+  static set = async <T extends Entry>(
+    key: string,
+    value: T
+  ): Promise<void> => {
     await this.acquire().put(key, value);
   };
 }

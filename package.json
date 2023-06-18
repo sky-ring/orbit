@@ -8,7 +8,7 @@
     "dev": "ts-node-dev ./src/main.ts --respawn --transpileOnly",
     "prod": "tsc && node .build/main.js",
     "codegen": "graphql-codegen --config codegen.yml",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha -r ts-node/register src/tests/**/*.test.ts"
   },
   "repository": {
     "type": "git",
@@ -27,14 +27,20 @@
     "express-graphql": "^0.12.0",
     "graphql": "^15.3.0",
     "graphql-tools": "^9.0.0",
-    "graphql-yoga": "^4.0.0"
+    "graphql-yoga": "^4.0.0",
+    "level": "^8.0.0"
   },
   "devDependencies": {
     "@graphql-codegen/cli": "^4.0.1",
     "@graphql-codegen/typescript": "^4.0.0",
     "@graphql-codegen/typescript-resolvers": "^4.0.0",
+    "@types/chai": "4.3.5",
     "@types/express": "^4.17.17",
+    "@types/level": "^6.0.1",
+    "@types/mocha": "^10.0.1",
     "@types/node": "^18.14.2",
+    "chai": "*",
+    "mocha": "*",
     "prettier": "2.8.8",
     "ts-node": "^10.9.1",
     "ts-node-dev": "^2.0.0",

@@ -1,5 +1,5 @@
-schema: 
-  - 'gql/*.graphql'
+schema:
+  - "gql/*.graphql"
   - scalar Upload
 generates:
   src/resolvers/resolvers.ts:

@@ -1,5 +1,5 @@
 import AppCore from "./core/app_core";
-import {initResolvers} from "./resolvers";
+import { initResolvers } from "./resolvers";
 
 let app = new AppCore();
 initResolvers();

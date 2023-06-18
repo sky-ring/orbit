@@ -1,12 +1,21 @@
 type Mutation {
-    dummy: Int
-}
-type Query{
-    version: Version
+  spawn(id: String!): Boolean
+  sendBoc(id: String!, boc64: String!): Boolean
+  bringDown(params: BringDownInput!): Boolean
 }
 
-type Version{
-    major: Int
-    minor: Int
-    patch: Int
+input BringDownInput {
+  id: String!
+  remove: Boolean = False
+}
+
+type Query {
+  version: Version
+  snapshots: [String]
+}
+
+type Version {
+  major: Int
+  minor: Int
+  patch: Int
 }

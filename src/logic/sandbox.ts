@@ -1,5 +1,6 @@
 import { Blockchain, BlockchainSnapshot } from "@ton-community/sandbox";
 import { db } from "./db";
+import { Cell } from "ton";
 
 export type Config = {
   snapshots: Array<string>;
@@ -23,6 +24,12 @@ export default class BlockchainLogic {
     await this.reload();
     this.chains.set(id, blkch);
     return blkch;
+  };
+  static sendMessage = async (id: string, boc64: string): Promise<boolean> => {
+    let blkch = this.chains.get(id);
+    let cell = Cell.fromBase64(boc64);
+    let result = await blkch?.sendMessage(cell);
+    return true;
   };
   static shutdown = async (
     id: string,

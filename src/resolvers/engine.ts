@@ -1,4 +1,3 @@
-import { Blockchain } from "@ton-community/sandbox";
 import { TypeResolver } from "./index";
 import BlockchainLogic from "../logic/sandbox";
 

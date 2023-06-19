@@ -4,4 +4,4 @@ import { initResolvers } from "./resolvers";
 let app = new AppCore();
 initResolvers();
 app.initServer();
-app.start(3022, () => console.log("server launched!"));
+app.start(24194, () => console.log("server launched!"));

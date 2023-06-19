@@ -6,6 +6,8 @@ import {
 } from "./resolvers";
 import { ContextType } from "../core/context";
 import { versionResolver } from "./version";
+import { engineResolver } from "./engine";
+import { messagesResolver } from "./messages";
 
 export let TypeResolver = new Resolvers<
   IResolvers<ContextType>,
@@ -16,4 +18,6 @@ export let TypeResolver = new Resolvers<
 export let initResolvers = () => {
   setResolvers(TypeResolver);
   versionResolver();
+  engineResolver();
+  messagesResolver();
 };

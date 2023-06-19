@@ -23,6 +23,22 @@ export default class DatabaseLogic {
       if (error.status == 404) return undefined;
     }
   };
+  static getBytes = async (key: string): Promise<Buffer | undefined> => {
+    try {
+      let a = await this.acquire().get(key, {
+        valueEncoding: "buffer",
+      });
+      return a as Buffer;
+    } catch (error: any) {
+      if (error.status == 404) return undefined;
+    }
+  };
+  static pop = async <T extends Entry>(key: string): Promise<T | undefined> => {
+    let t = await this.get<T>(key);
+    let ok = await this.del(key);
+    if (!ok) throw Error("Error deleting the key!");
+    return t;
+  };
   static del = async (key: string): Promise<boolean> => {
     return await this.acquire()
       .del(key)
@@ -34,6 +50,11 @@ export default class DatabaseLogic {
     value: T
   ): Promise<void> => {
     await this.acquire().put(key, value);
+  };
+  static setBytes = async (key: string, value: Buffer): Promise<void> => {
+    await this.acquire().put(key, value, {
+      valueEncoding: "buffer",
+    });
   };
 }
 

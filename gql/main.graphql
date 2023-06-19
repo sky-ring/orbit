@@ -1,6 +1,6 @@
 type Mutation {
   spawn(id: String!): Boolean
-  sendBoc(id: String!, boc64: String!): Boolean
+  sendBoc(id: String!, boc64: String!): [String]
   bringDown(params: BringDownInput!): Boolean
 }
 

@@ -44,7 +44,7 @@ export type BringDownInput = {
 export type Mutation = {
   __typename?: "Mutation";
   bringDown?: Maybe<Scalars["Boolean"]["output"]>;
-  sendBoc?: Maybe<Scalars["Boolean"]["output"]>;
+  sendBoc?: Maybe<Array<Maybe<Scalars["String"]["output"]>>>;
   spawn?: Maybe<Scalars["Boolean"]["output"]>;
 };
 
@@ -214,7 +214,7 @@ export type MutationResolvers<
     RequireFields<MutationBringDownArgs, "params">
   >;
   sendBoc?: Resolver<
-    Maybe<ResolversTypes["Boolean"]>,
+    Maybe<Array<Maybe<ResolversTypes["String"]>>>,
     ParentType,
     ContextType,
     RequireFields<MutationSendBocArgs, "boc64" | "id">

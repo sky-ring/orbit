@@ -1,9 +1,14 @@
 import { Blockchain, BlockchainSnapshot } from "@ton-community/sandbox";
 import { db } from "./db";
 import { Cell } from "ton";
+import { txBytes, txHash } from "../util/tx";
 
 export type Config = {
   snapshots: Array<string>;
+};
+
+export type BlockchainTxes = {
+  txList: Array<string>;
 };
 
 export default class BlockchainLogic {
@@ -25,11 +30,29 @@ export default class BlockchainLogic {
     this.chains.set(id, blkch);
     return blkch;
   };
-  static sendMessage = async (id: string, boc64: string): Promise<boolean> => {
+  static sendMessage = async (
+    id: string,
+    boc64: string
+  ): Promise<Array<string>> => {
     let blkch = this.chains.get(id);
     let cell = Cell.fromBase64(boc64);
     let result = await blkch?.sendMessage(cell);
-    return true;
+    let hashes = [];
+
+    for await (const tx of result?.transactions!) {
+      // TODO: Batch Insert
+      let hash = txHash(tx).toString(16);
+      let data = txBytes(tx);
+      await db.setBytes(`${id}-tx-${hash}`, data);
+      let txes = (await db.get<BlockchainTxes>(`${id}-tx`)) ?? {
+        txList: [],
+      };
+      txes.txList.push(hash);
+      await db.set<BlockchainTxes>(`${id}-tx`, txes);
+      hashes.push(hash);
+    }
+
+    return hashes;
   };
   static shutdown = async (
     id: string,
@@ -42,7 +65,10 @@ export default class BlockchainLogic {
       cfg.snapshots = cfg.snapshots.filter((item) => item !== id);
       await this.reload();
       await db.del(`${id}-snapshot`);
-      await db.del(`${id}-tx`);
+      let txes = await db.pop<BlockchainTxes>(`${id}-tx`);
+      for await (const tx of txes?.txList!) {
+        await db.del(`${id}-tx-${tx}`);
+      }
     }
     return x;
   };

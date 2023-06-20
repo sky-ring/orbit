@@ -36,6 +36,13 @@ export type Scalars = {
   Upload: { input: any; output: any };
 };
 
+export type AccountInfo = {
+  __typename?: "AccountInfo";
+  balance?: Maybe<Scalars["String"]["output"]>;
+  code?: Maybe<Scalars["String"]["output"]>;
+  data?: Maybe<Scalars["String"]["output"]>;
+};
+
 export type BringDownInput = {
   id: Scalars["String"]["input"];
   remove?: InputMaybe<Scalars["Boolean"]["input"]>;
@@ -44,12 +51,19 @@ export type BringDownInput = {
 export type Mutation = {
   __typename?: "Mutation";
   bringDown?: Maybe<Scalars["Boolean"]["output"]>;
+  createWallet?: Maybe<Scalars["String"]["output"]>;
   sendBoc?: Maybe<Array<Maybe<Scalars["String"]["output"]>>>;
   spawn?: Maybe<Scalars["Boolean"]["output"]>;
 };
 
 export type MutationBringDownArgs = {
   params: BringDownInput;
+};
+
+export type MutationCreateWalletArgs = {
+  balance: Scalars["String"]["input"];
+  id: Scalars["String"]["input"];
+  walletId: Scalars["String"]["input"];
 };
 
 export type MutationSendBocArgs = {
@@ -63,8 +77,14 @@ export type MutationSpawnArgs = {
 
 export type Query = {
   __typename?: "Query";
+  account?: Maybe<AccountInfo>;
   snapshots?: Maybe<Array<Maybe<Scalars["String"]["output"]>>>;
   version?: Maybe<Version>;
+};
+
+export type QueryAccountArgs = {
+  address: Scalars["String"]["input"];
+  id: Scalars["String"]["input"];
 };
 
 export type Version = {
@@ -181,6 +201,7 @@ export type DirectiveResolverFn<
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
+  AccountInfo: ResolverTypeWrapper<AccountInfo>;
   Boolean: ResolverTypeWrapper<Scalars["Boolean"]["output"]>;
   BringDownInput: BringDownInput;
   Int: ResolverTypeWrapper<Scalars["Int"]["output"]>;
@@ -193,6 +214,7 @@ export type ResolversTypes = {
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
+  AccountInfo: AccountInfo;
   Boolean: Scalars["Boolean"]["output"];
   BringDownInput: BringDownInput;
   Int: Scalars["Int"]["output"];
@@ -201,6 +223,16 @@ export type ResolversParentTypes = {
   String: Scalars["String"]["output"];
   Upload: Scalars["Upload"]["output"];
   Version: Version;
+};
+
+export type AccountInfoResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes["AccountInfo"] = ResolversParentTypes["AccountInfo"]
+> = {
+  balance?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
+  code?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
+  data?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type MutationResolvers<
@@ -212,6 +244,12 @@ export type MutationResolvers<
     ParentType,
     ContextType,
     RequireFields<MutationBringDownArgs, "params">
+  >;
+  createWallet?: Resolver<
+    Maybe<ResolversTypes["String"]>,
+    ParentType,
+    ContextType,
+    RequireFields<MutationCreateWalletArgs, "balance" | "id" | "walletId">
   >;
   sendBoc?: Resolver<
     Maybe<Array<Maybe<ResolversTypes["String"]>>>,
@@ -231,6 +269,12 @@ export type QueryResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes["Query"] = ResolversParentTypes["Query"]
 > = {
+  account?: Resolver<
+    Maybe<ResolversTypes["AccountInfo"]>,
+    ParentType,
+    ContextType,
+    RequireFields<QueryAccountArgs, "address" | "id">
+  >;
   snapshots?: Resolver<
     Maybe<Array<Maybe<ResolversTypes["String"]>>>,
     ParentType,
@@ -255,6 +299,7 @@ export type VersionResolvers<
 };
 
 export type Resolvers<ContextType = any> = {
+  AccountInfo?: AccountInfoResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   Upload?: GraphQLScalarType;

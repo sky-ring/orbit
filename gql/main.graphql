@@ -2,6 +2,7 @@ type Mutation {
   spawn(id: String!): Boolean
   sendBoc(id: String!, boc64: String!): [String]
   bringDown(params: BringDownInput!): Boolean
+  createWallet(id: String!, walletId: String!, balance: String!): String
 }
 
 input BringDownInput {
@@ -12,10 +13,17 @@ input BringDownInput {
 type Query {
   version: Version
   snapshots: [String]
+  account(id: String!, address: String!): AccountInfo
 }
 
 type Version {
   major: Int
   minor: Int
   patch: Int
+}
+
+type AccountInfo {
+  code: String
+  data: String
+  balance: String
 }

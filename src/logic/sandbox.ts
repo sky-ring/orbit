@@ -1,7 +1,8 @@
 import { Blockchain, BlockchainSnapshot } from "@ton-community/sandbox";
 import { db } from "./db";
-import { Cell } from "ton";
+import { Address, Cell } from "ton";
 import { txBytes, txHash } from "../util/tx";
+import { AccountInfo } from "../resolvers/resolvers";
 
 export type Config = {
   snapshots: Array<string>;
@@ -74,6 +75,34 @@ export default class BlockchainLogic {
   };
   static list = async (): Promise<Array<string>> => {
     return (await this.cfg()).snapshots ?? [];
+  };
+  static getAccount = async (
+    id: string,
+    account: string
+  ): Promise<AccountInfo> => {
+    let blkch = this.chains.get(id);
+    let cnt = await blkch?.getContract(Address.parse(account));
+    let state = cnt?.accountState!;
+    if (state.type == "active") {
+      let code = state.state.code;
+      let data = state.state.data;
+      let balance = cnt?.balance;
+      return {
+        code: code?.toBoc().toString("base64"),
+        data: data?.toBoc().toString("base64"),
+        balance: balance?.toString(),
+      };
+    }
+    return {};
+  };
+  static createWallet = async (
+    id: string,
+    account: string,
+    balance: bigint
+  ): Promise<Address> => {
+    let blkch = this.chains.get(id);
+    let cnt = await blkch?.treasury(account, { balance });
+    return cnt?.address!;
   };
   private static cfg = async (): Promise<Config> => {
     if (!this.config) {

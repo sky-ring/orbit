@@ -3,6 +3,10 @@ import { db } from "./db";
 import { Address, Cell } from "ton";
 import { txBytes, txHash } from "../util/tx";
 import { AccountInfo } from "../resolvers/resolvers";
+import {
+  deserializeBlockchain,
+  serializeBlockchain,
+} from "../sandbox/serialize";
 
 export type Config = {
   snapshots: Array<string>;
@@ -23,8 +27,7 @@ export default class BlockchainLogic {
     let blkch = await Blockchain.create();
     if (list.includes(id)) {
       // We have a snapshot here, better load it
-      let snapshot = await db.get<BlockchainSnapshot>(`${id}-snapshot`);
-      blkch.loadFrom(snapshot!);
+      await this.retain(id, blkch);
     }
     (await this.cfg()).snapshots.push(id);
     await this.reload();
@@ -52,7 +55,7 @@ export default class BlockchainLogic {
       await db.set<BlockchainTxes>(`${id}-tx`, txes);
       hashes.push(hash);
     }
-
+    await this.persist(id);
     return hashes;
   };
   static shutdown = async (
@@ -83,6 +86,7 @@ export default class BlockchainLogic {
     let blkch = this.chains.get(id);
     let cnt = await blkch?.getContract(Address.parse(account));
     let state = cnt?.accountState!;
+    console.log(cnt);
     if (state.type == "active") {
       let code = state.state.code;
       let data = state.state.data;
@@ -102,6 +106,7 @@ export default class BlockchainLogic {
   ): Promise<Address> => {
     let blkch = this.chains.get(id);
     let cnt = await blkch?.treasury(account, { balance });
+    await this.persist(id);
     return cnt?.address!;
   };
   private static cfg = async (): Promise<Config> => {
@@ -113,6 +118,26 @@ export default class BlockchainLogic {
   };
   private static reload = async (): Promise<boolean> => {
     await db.set("config", await this.cfg());
+    return true;
+  };
+  private static retain = async (
+    id: string,
+    blkch: Blockchain
+  ): Promise<boolean> => {
+    let buf = await db.getBytes(`${id}-snapshot`);
+    if (buf) {
+      let snap = deserializeBlockchain(buf);
+      await blkch?.loadFrom(snap);
+      console.log("fouck");
+      console.log(blkch?.snapshot());
+      return true;
+    }
+    return false;
+  };
+  private static persist = async (id: string): Promise<boolean> => {
+    let blkch = this.chains.get(id);
+    let buf = serializeBlockchain(blkch!);
+    await db.setBytes(`${id}-snapshot`, buf);
     return true;
   };
 }

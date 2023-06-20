@@ -39,7 +39,7 @@ export default class BlockchainLogic {
     id: string,
     boc64: string
   ): Promise<Array<string>> => {
-    let blkch = this.chains.get(id);
+    let blkch = await this.ensureOpen(id);
     let cell = Cell.fromBase64(boc64);
     let result = await blkch?.sendMessage(cell);
     let hashes = [];
@@ -84,7 +84,7 @@ export default class BlockchainLogic {
     id: string,
     account: string
   ): Promise<AccountInfo> => {
-    let blkch = this.chains.get(id);
+    let blkch = await this.ensureOpen(id);
     let cnt = await blkch?.getContract(Address.parse(account));
     let state = cnt?.accountState!;
     if (state.type == "active") {
@@ -125,10 +125,14 @@ export default class BlockchainLogic {
     account: string,
     balance: bigint
   ): Promise<Address> => {
-    let blkch = this.chains.get(id);
+    let blkch = await this.ensureOpen(id);
     let cnt = await blkch?.treasury(account, { balance });
     await this.persist(id);
     return cnt?.address!;
+  };
+  private static ensureOpen = async (id: string): Promise<Blockchain> => {
+    if (this.chains.has(id)) return this.chains.get(id)!;
+    return await this.launch(id);
   };
   private static cfg = async (): Promise<Config> => {
     if (!this.config) {

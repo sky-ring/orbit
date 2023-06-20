@@ -3,6 +3,7 @@ type Mutation {
   sendBoc(id: String!, boc64: String!): [String]
   bringDown(params: BringDownInput!): Boolean
   createWallet(id: String!, walletId: String!, balance: String!): String
+  charge(id: String!, address: String!, value: String!): Boolean
 }
 
 input BringDownInput {

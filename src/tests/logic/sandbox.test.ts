@@ -2,7 +2,7 @@ import { assert, expect } from "chai";
 import BlockchainLogic from "../../logic/sandbox";
 import { ONE_TON } from "../../util/consts";
 import { internal } from "../../util/message";
-import { Builder, Cell, storeMessage } from "ton";
+import { Address, Builder, Cell, address, storeMessage } from "ton";
 
 describe("sandbox-logic", () => {
   it("should create and remove blockchain", async () => {

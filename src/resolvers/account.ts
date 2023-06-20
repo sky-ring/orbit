@@ -19,5 +19,12 @@ export let accountResolver = () => {
       let addr = await BlockchainLogic.createWallet(id, walletId, bn);
       return addr.toString();
     },
+    charge: async (_, { id, address, value }, {}): Promise<boolean> => {
+      if (value.endsWith("ton")) {
+        value = value.replace("ton", "000000000");
+      }
+      let bn = BigInt(value);
+      return await BlockchainLogic.chargeAccount(id, address, bn);
+    },
   });
 };

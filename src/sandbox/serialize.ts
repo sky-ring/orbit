@@ -71,7 +71,6 @@ export let loadBlockchainSnapshot = (snap: Entry): BlockchainSnapshot => {
 
 export let serializeBlockchain = (b: Blockchain): Buffer => {
   let snap = b.snapshot();
-  console.log(snap);
   let e = storeBlockchainSnapshot(snap);
   return serialize(e);
 };
@@ -79,6 +78,5 @@ export let serializeBlockchain = (b: Blockchain): Buffer => {
 export let deserializeBlockchain = (b: Buffer): BlockchainSnapshot => {
   let e: Entry = deserialize(b);
   let snap = loadBlockchainSnapshot(e);
-  console.log("motha fucka:", snap);
   return snap;
 };

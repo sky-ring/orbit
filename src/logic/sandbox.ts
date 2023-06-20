@@ -1,12 +1,13 @@
 import { Blockchain, BlockchainSnapshot } from "@ton-community/sandbox";
 import { db } from "./db";
-import { Address, Cell } from "ton";
+import { Address, Builder, Cell, storeMessage } from "ton";
 import { txBytes, txHash } from "../util/tx";
 import { AccountInfo } from "../resolvers/resolvers";
 import {
   deserializeBlockchain,
   serializeBlockchain,
 } from "../sandbox/serialize";
+import { internal } from "../util/message";
 
 export type Config = {
   snapshots: Array<string>;
@@ -86,7 +87,6 @@ export default class BlockchainLogic {
     let blkch = this.chains.get(id);
     let cnt = await blkch?.getContract(Address.parse(account));
     let state = cnt?.accountState!;
-    console.log(cnt);
     if (state.type == "active") {
       let code = state.state.code;
       let data = state.state.data;
@@ -96,8 +96,29 @@ export default class BlockchainLogic {
         data: data?.toBoc().toString("base64"),
         balance: balance?.toString(),
       };
+    } else if (state.type == "uninit") {
+      let balance = cnt?.balance;
+      if (balance) return { balance: balance.toString() };
     }
     return {};
+  };
+  static chargeAccount = async (
+    id: string,
+    account: string,
+    value: bigint
+  ): Promise<boolean> => {
+    let zero = new Address(0, Buffer.alloc(32, 0));
+    let msg = internal({
+      from: zero,
+      to: Address.parse(account),
+      value: value,
+      bounce: false, // Make it unbouncable so we get that money locked
+    });
+    let b = new Builder();
+    storeMessage(msg)(b);
+    let c = b.asCell();
+    let r = await this.sendMessage(id, c.toBoc().toString("base64"));
+    return r.length == 1;
   };
   static createWallet = async (
     id: string,
@@ -128,8 +149,6 @@ export default class BlockchainLogic {
     if (buf) {
       let snap = deserializeBlockchain(buf);
       await blkch?.loadFrom(snap);
-      console.log("fouck");
-      console.log(blkch?.snapshot());
       return true;
     }
     return false;

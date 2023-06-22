@@ -8,11 +8,15 @@
     "dev": "ts-node-dev ./src/main.ts --respawn --transpileOnly",
     "prod": "tsc && node .build/main.js",
     "codegen": "graphql-codegen --config codegen.yml",
-    "test": "mocha -r ts-node/register src/tests/**/*.test.ts"
+    "test": "mocha -r ts-node/register src/tests/**/*.test.ts",
+    "copy-files": "mkdir -p ./dist/gql && cp -r ./src/gql/ ./dist/gql"
   },
   "repository": {
     "type": "git",
     "url": "github.com/0xNebulae/orbit"
+  },
+  "bin": {
+    "orbit": "./dist/main.js"
   },
   "author": "Amin Rezaei",
   "license": "MIT",

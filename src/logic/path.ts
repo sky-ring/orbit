@@ -3,6 +3,7 @@ import os from "os";
 import path from "path";
 
 export default class PathLogic {
+  static mainDir: string = ".";
   static ensureDataDir = (
     appName?: string,
     appAuthor?: string,

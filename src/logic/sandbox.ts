@@ -1,4 +1,4 @@
-import { Blockchain, BlockchainSnapshot } from "@ton-community/sandbox";
+import { Blockchain, BlockchainTransaction } from "@ton-community/sandbox";
 import { db } from "./db";
 import { Address, Builder, Cell, storeMessage } from "ton";
 import { txBytes, txHash } from "../util/tx";
@@ -16,6 +16,8 @@ export type Config = {
 export type BlockchainTxes = {
   txList: Array<string>;
 };
+
+export type OrbitTx = BlockchainTransaction & { hash: string };
 
 export default class BlockchainLogic {
   private static chains: Map<string, Blockchain> = new Map();
@@ -38,11 +40,11 @@ export default class BlockchainLogic {
   static sendMessage = async (
     id: string,
     boc64: string
-  ): Promise<Array<string>> => {
+  ): Promise<Array<OrbitTx>> => {
     let blkch = await this.ensureOpen(id);
     let cell = Cell.fromBase64(boc64);
     let result = await blkch?.sendMessage(cell);
-    let hashes = [];
+    let txResult: Array<OrbitTx> = [];
 
     for await (const tx of result?.transactions!) {
       // TODO: Batch Insert
@@ -54,10 +56,13 @@ export default class BlockchainLogic {
       };
       txes.txList.push(hash);
       await db.set<BlockchainTxes>(`${id}-tx`, txes);
-      hashes.push(hash);
+      txResult.push({
+        hash,
+        ...tx,
+      });
     }
     await this.persist(id);
-    return hashes;
+    return txResult;
   };
   static shutdown = async (
     id: string,

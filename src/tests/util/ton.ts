@@ -3,10 +3,11 @@ import {
   Builder,
   Cell,
   StateInit,
+  beginCell,
   storeMessage,
   storeStateInit,
 } from "ton";
-import { external } from "../../util/message";
+import { external, internal } from "../../util/message";
 import { sign } from "ton-crypto";
 
 export let stateInit = (code: Cell, pub: Buffer): StateInit => {
@@ -71,4 +72,38 @@ export let initialMessageW3R2 = (priv: Buffer): Cell => {
   nb.storeBuffer(sig, 64);
   nb.storeSlice(data.asSlice());
   return nb.endCell();
+};
+
+export let transferMessageW3R2 = (
+  priv: Buffer,
+  from: Address,
+  to: Address,
+  value: bigint,
+  seq: number = 0
+): Cell => {
+  let msg = internal({
+    from,
+    to,
+    value,
+  });
+  let b = new Builder();
+  b.storeUint(0, 32);
+  b.storeUint(0xffffffff - 1, 32);
+  b.storeUint(seq, 32);
+  b.storeUint(0, 8);
+  b.storeRef(beginCell().store(storeMessage(msg)));
+  let data = b.endCell();
+  let sig = sign(data.hash(), priv);
+  let nb = new Builder();
+  nb.storeBuffer(sig, 64);
+  nb.storeSlice(data.asSlice());
+  return nb.endCell();
+};
+
+export let externalSend = (to: Address, body: Cell) => {
+  let msg = external({
+    to,
+    body,
+  });
+  return beginCell().store(storeMessage(msg)).endCell();
 };

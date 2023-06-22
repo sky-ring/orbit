@@ -32,7 +32,7 @@ describe("sandbox-logic", () => {
       c.toBoc({ idx: true, crc32: true }).toString("base64")
     );
     assert(r.length != 0);
-    console.log(r);
+    console.log(r.map((t) => t.hash));
     let ab = await alice.getBalance();
     let bb = await bob.getBalance();
     assert(ab == ONE_TON); // since we sent the message not from alice's contract, it's balance is untouched

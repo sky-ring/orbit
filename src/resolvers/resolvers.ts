@@ -34,7 +34,7 @@ export type Mutation = {
   bringDown?: Maybe<Scalars['Boolean']['output']>;
   charge?: Maybe<Scalars['Boolean']['output']>;
   createWallet?: Maybe<Scalars['String']['output']>;
-  sendBoc?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
+  sendBoc?: Maybe<Array<Maybe<Tx>>>;
   spawn?: Maybe<Scalars['Boolean']['output']>;
 };
 
@@ -79,6 +79,17 @@ export type Query = {
 export type QueryAccountArgs = {
   address: Scalars['String']['input'];
   id: Scalars['String']['input'];
+};
+
+export type Tx = {
+  __typename?: 'Tx';
+  hash: Scalars['String']['output'];
+  info?: Maybe<TxInfo>;
+};
+
+export type TxInfo = {
+  __typename?: 'TxInfo';
+  fee: Scalars['String']['output'];
 };
 
 export type Version = {
@@ -166,6 +177,8 @@ export type ResolversTypes = {
   Mutation: ResolverTypeWrapper<{}>;
   Query: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
+  Tx: ResolverTypeWrapper<Tx>;
+  TxInfo: ResolverTypeWrapper<TxInfo>;
   Upload: ResolverTypeWrapper<Scalars['Upload']['output']>;
   Version: ResolverTypeWrapper<Version>;
 };
@@ -179,6 +192,8 @@ export type ResolversParentTypes = {
   Mutation: {};
   Query: {};
   String: Scalars['String']['output'];
+  Tx: Tx;
+  TxInfo: TxInfo;
   Upload: Scalars['Upload']['output'];
   Version: Version;
 };
@@ -194,7 +209,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   bringDown?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationBringDownArgs, 'params'>>;
   charge?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationChargeArgs, 'address' | 'id' | 'value'>>;
   createWallet?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType, RequireFields<MutationCreateWalletArgs, 'balance' | 'id' | 'walletId'>>;
-  sendBoc?: Resolver<Maybe<Array<Maybe<ResolversTypes['String']>>>, ParentType, ContextType, RequireFields<MutationSendBocArgs, 'boc64' | 'id'>>;
+  sendBoc?: Resolver<Maybe<Array<Maybe<ResolversTypes['Tx']>>>, ParentType, ContextType, RequireFields<MutationSendBocArgs, 'boc64' | 'id'>>;
   spawn?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationSpawnArgs, 'id'>>;
 };
 
@@ -202,6 +217,17 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   account?: Resolver<Maybe<ResolversTypes['AccountInfo']>, ParentType, ContextType, RequireFields<QueryAccountArgs, 'address' | 'id'>>;
   snapshots?: Resolver<Maybe<Array<Maybe<ResolversTypes['String']>>>, ParentType, ContextType>;
   version?: Resolver<Maybe<ResolversTypes['Version']>, ParentType, ContextType>;
+};
+
+export type TxResolvers<ContextType = any, ParentType extends ResolversParentTypes['Tx'] = ResolversParentTypes['Tx']> = {
+  hash?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  info?: Resolver<Maybe<ResolversTypes['TxInfo']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type TxInfoResolvers<ContextType = any, ParentType extends ResolversParentTypes['TxInfo'] = ResolversParentTypes['TxInfo']> = {
+  fee?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export interface UploadScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Upload'], any> {
@@ -219,6 +245,8 @@ export type Resolvers<ContextType = any> = {
   AccountInfo?: AccountInfoResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
+  Tx?: TxResolvers<ContextType>;
+  TxInfo?: TxInfoResolvers<ContextType>;
   Upload?: GraphQLScalarType;
   Version?: VersionResolvers<ContextType>;
 };

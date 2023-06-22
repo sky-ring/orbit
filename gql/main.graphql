@@ -1,6 +1,6 @@
 type Mutation {
   spawn(id: String!): Boolean
-  sendBoc(id: String!, boc64: String!): [String]
+  sendBoc(id: String!, boc64: String!): [Tx]
   bringDown(params: BringDownInput!): Boolean
   createWallet(id: String!, walletId: String!, balance: String!): String
   charge(id: String!, address: String!, value: String!): Boolean
@@ -27,4 +27,13 @@ type AccountInfo {
   code: String
   data: String
   balance: String
+}
+
+type Tx {
+  hash: String!
+  info: TxInfo
+}
+
+type TxInfo {
+  fee: String!
 }

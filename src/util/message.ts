@@ -32,3 +32,19 @@ export function internal(params: {
     init: params.stateInit,
   };
 }
+
+export function external(params: {
+  to: Address;
+  body?: Cell;
+  stateInit?: StateInit;
+}): Message {
+  return {
+    info: {
+      type: "external-in",
+      dest: params.to,
+      importFee: 0n,
+    },
+    body: params.body ?? new Cell(),
+    init: params.stateInit,
+  };
+}

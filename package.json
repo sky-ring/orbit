@@ -17,6 +17,7 @@
   "author": "Amin Rezaei",
   "license": "MIT",
   "dependencies": {
+    "@graphql-tools/executor-http": "^1.0.0",
     "@graphql-tools/graphql-file-loader": "latest",
     "@graphql-tools/json-file-loader": "latest",
     "@graphql-tools/load": "latest",
@@ -29,7 +30,8 @@
     "graphql-tools": "^9.0.0",
     "graphql-yoga": "^4.0.0",
     "level": "^8.0.0",
-    "ton": "^13.5.0"
+    "ton": "^13.5.0",
+    "ton-crypto": "^3.2.0"
   },
   "devDependencies": {
     "@graphql-codegen/cli": "^4.0.1",

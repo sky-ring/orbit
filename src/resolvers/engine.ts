@@ -10,13 +10,13 @@ export let engineResolver = () => {
 
   TypeResolver.appendMutation({
     spawn: async (_, { id }, {}): Promise<boolean> => {
-      let b = BlockchainLogic.launch(id);
+      let b = await BlockchainLogic.launch(id);
       return b != null;
     },
     bringDown: async (_, { params }, {}): Promise<boolean> => {
       let { id, remove } = params;
       remove = !!remove;
-      return BlockchainLogic.shutdown(id, remove);
+      return await BlockchainLogic.shutdown(id, remove);
     },
   });
 };

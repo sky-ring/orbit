@@ -71,8 +71,10 @@ export default class BlockchainLogic {
       await this.reload();
       await db.del(`${id}-snapshot`);
       let txes = await db.pop<BlockchainTxes>(`${id}-tx`);
-      for await (const tx of txes?.txList!) {
-        await db.del(`${id}-tx-${tx}`);
+      if (txes) {
+        for await (const tx of txes?.txList!) {
+          await db.del(`${id}-tx-${tx}`);
+        }
       }
     }
     return x;

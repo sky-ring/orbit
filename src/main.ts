@@ -8,4 +8,6 @@ PathLogic.mainDir = __dirname;
 let app = new AppCore();
 initResolvers();
 app.initServer();
-app.start(24194, () => console.log("server launched!"));
+app.start(24194, () =>
+  console.log("Orbit GraphQL Server is operative at ::24194!")
+);

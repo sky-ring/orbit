@@ -2,9 +2,9 @@
   "name": "orbit",
   "version": "0.1.0",
   "description": "Mini TON Blockchain Server",
-  "main": "index.js",
+  "main": "src/main.ts",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && chmod +x ./dist/main.js",
     "dev": "ts-node-dev ./src/main.ts --respawn --transpileOnly",
     "prod": "tsc && node .build/main.js",
     "codegen": "graphql-codegen --config codegen.yml",

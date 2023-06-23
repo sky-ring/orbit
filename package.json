@@ -1,6 +1,6 @@
 {
   "name": "@nexarae/orbit",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Mini TON Blockchain Server",
   "main": "dist/main.js",
   "types": "dist/main.d.ts",
@@ -9,7 +9,7 @@
   ],
   "scripts": {
     "build": "tsc && chmod +x ./dist/main.js",
-    "prepublish": "tsc && chmod +x ./dist/main.js",
+    "prepublish": "npm run build && npm run copy-files",
     "dev": "ts-node-dev ./src/main.ts --respawn --transpileOnly",
     "prod": "tsc && node .build/main.js",
     "codegen": "graphql-codegen --config codegen.yml",

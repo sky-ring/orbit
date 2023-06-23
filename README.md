@@ -31,7 +31,9 @@ To get started with Orbit, follow these steps:
    orbit
    ```
 
-If everything is okay, you will see a successful launch message. 4. You can now send GraphQL queries to `localhost:29194` or navigate to the GraphiQL page at `localhost:29194/graphql`.
+If everything is okay, you will see a successful launch message.
+
+4. You can now send GraphQL queries to `localhost:29194` or navigate to the GraphiQL page at `localhost:29194/graphql`.
 
 ## GraphQL Definitions
 

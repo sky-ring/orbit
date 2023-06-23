@@ -1,7 +1,6 @@
 .build/
 .idea/
 node_modules/
-package-lock.json
 *.zip
 .DS_Store
 dist/

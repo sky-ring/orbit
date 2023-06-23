@@ -1,31 +1,56 @@
+<img align="left" width="64" height="64" src="https://github.com/0xNebulae/orbit/blob/main/assets/orbit.png">
+
 # Orbit
 
-Orbit is a wrapper GraphQL server around `@ton-community/sandbox` that provides a mini TON Blockchain Server. It's purpose is to provide an easy to launch Blockchain environment (like `testnet`) so projects can be easily and thoroughly tested before deploying to `mainnet`. Rift framework will utilize Orbit to provide multi-contract testing framework for TON development.
+[![PyPI version](https://img.shields.io/badge/@nexarae/orbit-0.1.2-informational?style=flat-square&color=FFFF91&labelColor=360825)](https://www.npmjs.com/package/@nexarae/orbit)
 
-### Why not use Sandbox itself?
+Orbit is a GraphQL server wrapper around `@ton-community/sandbox`, designed to provide a mini TON Blockchain Server. Its purpose is to offer an easily launchable Blockchain environment (similar to `testnet`) for seamless and thorough project testing before deploying to `mainnet`. The Rift framework will leverage Orbit to provide a multi-contract testing framework for TON development.
 
-The reason behind not using sandbox directly, is that sandbox doesn't provide direct persistance of Blockchain state and transactions and is specially developed for `node.js` environments. Orbit comes as a complimentary tool to provide these enhancements. Being a local server provides the benefit of privacy and most flexibility before initial launch of the project to `testnet` or `mainnet`.
+### Why Use Orbit?
+
+While Sandbox itself is a valuable tool, it lacks direct persistence of Blockchain state and transactions, and is primarily tailored for `node.js` environments. Orbit serves as a complementary tool, addressing these limitations by providing enhanced functionalities. As a local server, it ensures privacy and offers maximum flexibility before the project's initial launch on `testnet` or `mainnet`.
 
 ### What's Next?
 
-As of now Orbit provides a GraphQL server to make calls, but we will support `ton-api-v4` so the changes in the code can be minimized.
+Currently, Orbit provides a GraphQL server for making calls. We have plans to support `ton-api-v4`, which will minimize code changes required during integration.
+
+## How to Use
+
+To get started with Orbit, follow these steps:
+
+1. Ensure you have a node environment set up.
+2. Install Orbit globally by running the following command:
+
+   ```bash
+   npm install -g @nexarae/orbit
+   ```
+
+3. Open up a terminal and type:
+
+   ```bash
+   orbit
+   ```
+
+If everything is okay, you will see a successful launch message. 4. You can now send GraphQL queries to `localhost:29194` or navigate to the GraphiQL page at `localhost:29194/graphql`.
 
 ## GraphQL Definitions
 
-Here are the GraphQL definition for `Query` and `Mutation` with slight descriptions:
+Here are the GraphQL definitions for `Query` and `Mutation` along with brief descriptions:
 
 ```graphql
 type Mutation {
-  spawn(id: String!): Boolean # launches blockchain instance with id
-  sendBoc(id: String!, boc64: String!): [Tx] # sends a boc message to specified network
-  bringDown(params: BringDownInput!): Boolean # shutdowns blockchain instance with remove capabilty
-  createWallet(id: String!, walletId: String!, balance: String!): String # create a wallet with name on the network with specified balance
-  charge(id: String!, address: String!, value: String!): Boolean # top-ups balance for specified account on the network
+  spawn(id: String!): Boolean # Launches a blockchain instance with the specified ID
+  sendBoc(id: String!, boc64: String!): [Tx] # Sends a BOC message to the specified network
+  bringDown(params: BringDownInput!): Boolean # Shuts down a blockchain instance with removal capability
+  createWallet(id: String!, walletId: String!, balance: String!): String # Creates a wallet with the specified name on the network with the given balance
+  charge(id: String!, address: String!, value: String!): Boolean # Tops up the balance for the specified account on the network
 }
 
 type Query {
-  version: Version # Version of the orbit
-  snapshots: [String] # List of stored snapshots of blockchains
-  account(id: String!, address: String!): AccountInfo # Account information
+  version: Version # Retrieves the version of Orbit
+  snapshots: [String] # Retrieves the list of stored snapshots of blockchains
+  account(id: String!, address: String!): AccountInfo # Retrieves account information for the specified ID and address
 }
 ```
+
+Feel free to explore and utilize these GraphQL endpoints to interact with the Orbit server.

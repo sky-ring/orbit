@@ -1,5 +1,5 @@
 {
-  "name": "@nexarae/orbit",
+  "name": "@sky-ring/orbit",
   "version": "0.1.2",
   "description": "Mini TON Blockchain Server",
   "main": "dist/main.js",
@@ -18,7 +18,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "github.com/0xNebulae/orbit"
+    "url": "github.com/sky-ring/orbit"
   },
   "bin": {
     "orbit": "./dist/main.js"

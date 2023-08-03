@@ -1,8 +1,8 @@
-<img align="left" width="64" height="64" src="https://github.com/0xNebulae/orbit/blob/main/assets/orbit.png">
+<img align="left" width="64" height="64" src="https://github.com/sky-ring/orbit/blob/main/assets/orbit.png">
 
 # Orbit
 
-[![PyPI version](https://img.shields.io/badge/@nexarae/orbit-0.1.2-informational?style=flat-square&color=FFFF91&labelColor=360825)](https://www.npmjs.com/package/@nexarae/orbit)
+[![PyPI version](https://img.shields.io/badge/@sky-ring/orbit-0.1.2-informational?style=flat-square&color=FFFF91&labelColor=360825)](https://www.npmjs.com/package/@sky-ring/orbit)
 
 Orbit is a GraphQL server wrapper around `@ton-community/sandbox`, designed to provide a mini TON Blockchain Server. Its purpose is to offer an easily launchable Blockchain environment (similar to `testnet`) for seamless and thorough project testing before deploying to `mainnet`. The Rift framework will leverage Orbit to provide a multi-contract testing framework for TON development.
 
@@ -22,7 +22,7 @@ To get started with Orbit, follow these steps:
 2. Install Orbit globally by running the following command:
 
    ```bash
-   npm install -g @nexarae/orbit
+   npm install -g @sky-ring/orbit
    ```
 
 3. Open up a terminal and type:
